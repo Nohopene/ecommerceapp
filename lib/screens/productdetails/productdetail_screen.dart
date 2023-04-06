@@ -1,13 +1,13 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerceapp/constanst/color_constant.dart';
 import 'package:ecommerceapp/models/product_model.dart';
-import 'package:ecommerceapp/screens/productdetails/test.dart';
 import 'package:ecommerceapp/screens/productdetails/widget/buynow_widget.dart';
 import 'package:ecommerceapp/screens/productdetails/widget/elevated_button.dart';
 import 'package:ecommerceapp/screens/productdetails/widget/product_description.dart';
 import 'package:ecommerceapp/screens/productdetails/widget/product_image.dart';
 import 'package:ecommerceapp/screens/productdetails/widget/product_infor.dart';
+import 'package:ecommerceapp/services/cart_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -18,11 +18,20 @@ import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:sizer/sizer.dart';
 
-class ProductDetail extends StatelessWidget {
+class ProductDetail extends StatefulWidget {
   final String? productId;
   final Product? product;
 
   const ProductDetail({super.key, this.productId, this.product});
+
+  @override
+  State<ProductDetail> createState() => _ProductDetailState();
+}
+
+class _ProductDetailState extends State<ProductDetail> {
+  User? user = FirebaseAuth.instance.currentUser;
+
+  final CartService _service = CartService();
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +46,11 @@ class ProductDetail extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ProductImage(product: product),
+                ProductImage(product: widget.product),
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(1.5.h, 3.h, 1.5.h, 5),
                   child: Text(
-                    product!.name,
+                    widget.product!.name,
                     maxLines: 2,
                     style: const TextStyle(
                       fontWeight: FontWeight.w500,
@@ -57,7 +66,7 @@ class ProductDetail extends StatelessWidget {
                       Text(
                         NumberFormat.simpleCurrency(
                                 decimalDigits: 0, locale: 'vi-VN')
-                            .format(product!.price),
+                            .format(widget.product!.price),
                         style: const TextStyle(
                           fontWeight: FontWeight.w500,
                           color: Colors.red,
@@ -67,11 +76,11 @@ class ProductDetail extends StatelessWidget {
                       SizedBox(
                         width: 2.h,
                       ),
-                      if (product!.percentOff! > 0)
+                      if (widget.product!.percentOff! > 0)
                         Text(
                           NumberFormat.simpleCurrency(
                                   decimalDigits: 0, locale: 'vi-VN')
-                              .format(product!.regularPrice),
+                              .format(widget.product!.regularPrice),
                           style: const TextStyle(
                               fontWeight: FontWeight.w500,
                               color: Colors.grey,
@@ -113,7 +122,8 @@ class ProductDetail extends StatelessWidget {
                   MyElevatedButton(
                     title: 'Add to cart',
                     onPressed: () {
-                      print('object');
+                      _service.checkCart(
+                          product: widget.product, productId: widget.productId);
                     },
                     backgroundColor: discountColor,
                   ),
@@ -129,7 +139,7 @@ class ProductDetail extends StatelessWidget {
                           ),
                           context: context,
                           builder: (context) {
-                            return BuyNowWidget(product: product);
+                            return BuyNowWidget(product: widget.product);
                           });
                     },
                     backgroundColor: primaryColor,
@@ -195,7 +205,7 @@ class ProductDetail extends StatelessWidget {
                             color: primaryColor,
                           ),
                           direction: Axis.horizontal,
-                          rating: product!.rating,
+                          rating: widget.product!.rating,
                           unratedColor: const Color(0xFF9E9E9E),
                           itemCount: 5,
                           itemSize: 14,
@@ -204,7 +214,7 @@ class ProductDetail extends StatelessWidget {
                           width: 5,
                         ),
                         Text(
-                          '${product!.rating}/5',
+                          '${widget.product!.rating}/5',
                           style: const TextStyle(
                               fontSize: 13, color: primaryColor),
                         )
@@ -231,7 +241,7 @@ class ProductDetail extends StatelessWidget {
                   context: context,
                   builder: (context) {
                     return InformationWidget(
-                      product: product,
+                      product: widget.product,
                     );
                   });
             },
@@ -276,7 +286,7 @@ class ProductDetail extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '${product!.descriptions}',
+            '${widget.product!.descriptions}',
             maxLines: 3,
           ),
           const SizedBox(
@@ -288,7 +298,7 @@ class ProductDetail extends StatelessWidget {
                   context: context,
                   builder: (context) {
                     return ProductDescription(
-                      product: product,
+                      product: widget.product,
                     );
                   });
             },

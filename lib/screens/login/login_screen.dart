@@ -2,7 +2,7 @@ import 'package:ecommerceapp/constanst/color_constant.dart';
 import 'package:ecommerceapp/constanst/image_constant.dart';
 import 'package:ecommerceapp/screens/login/widget/button_widget.dart';
 
-import 'package:ecommerceapp/services/phoneauth_service.dart';
+import 'package:ecommerceapp/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -136,7 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     onChanged: (value) {
                       setState(() {
-                        if (value.length == 10) {
+                        if (value.length >= 9) {
                           _validPhoneNumber = true;
                         } else {
                           _validPhoneNumber = false;

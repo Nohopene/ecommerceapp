@@ -2,7 +2,7 @@ import 'package:ecommerceapp/constanst/color_constant.dart';
 import 'package:ecommerceapp/screens/home/home_screen.dart';
 import 'package:ecommerceapp/screens/login/login_screen.dart';
 import 'package:ecommerceapp/screens/main_screen.dart';
-import 'package:ecommerceapp/services/phoneauth_service.dart';
+import 'package:ecommerceapp/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
@@ -19,30 +19,10 @@ class _OTPScreenState extends State<OTPScreen> {
 
   PhoneAuthService _service = PhoneAuthService();
 
+  String? otpCode;
+
   @override
   Widget build(BuildContext context) {
-    final defaultPinTheme = PinTheme(
-      width: 56,
-      height: 56,
-      textStyle: TextStyle(
-          fontSize: 28,
-          color: Color.fromRGBO(30, 60, 87, 1),
-          fontWeight: FontWeight.w600),
-      decoration: BoxDecoration(
-          border: Border.all(color: Color.fromRGBO(234, 239, 243, 1)),
-          borderRadius: BorderRadius.circular(20)),
-    );
-
-    final focusedPinTheme = defaultPinTheme.copyDecorationWith(
-      border: Border.all(color: Color.fromRGBO(114, 178, 238, 1)),
-      borderRadius: BorderRadius.circular(8),
-    );
-
-    final submittedPinTheme = defaultPinTheme.copyWith(
-        decoration: defaultPinTheme.decoration
-            ?.copyWith(color: Color.fromRGBO(234, 239, 243, 1)));
-
-    var code = '';
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -90,8 +70,10 @@ class _OTPScreenState extends State<OTPScreen> {
               Pinput(
                 length: 6,
                 showCursor: true,
-                onChanged: (value) {
-                  code = value;
+                onCompleted: (value) {
+                  setState(() {
+                    otpCode = value;
+                  });
                 },
               ),
               SizedBox(
@@ -102,21 +84,10 @@ class _OTPScreenState extends State<OTPScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
-                    try {
-                      PhoneAuthCredential credential =
-                          PhoneAuthProvider.credential(
-                              verificationId: LoginScreen.verify,
-                              smsCode: code);
-                      final User? user =
-                          (await auth.signInWithCredential(credential)).user;
-
-                      if (user != null) {
-                        _service.addUser(context);
-                      } else {
-                        print('Login failed');
-                      }
-                    } catch (e) {
-                      print('Wrong otp');
+                    if (otpCode != null) {
+                      _service.verifyOtp(userOtp: otpCode!, context: context);
+                    } else {
+                      showSnackBar(context, "Enter 6-Digit code");
                     }
                   },
                   child: Text('Verify phone number'),
@@ -144,4 +115,12 @@ class _OTPScreenState extends State<OTPScreen> {
       ),
     );
   }
+}
+
+void showSnackBar(BuildContext context, String content) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(content),
+    ),
+  );
 }
