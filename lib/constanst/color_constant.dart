@@ -22,3 +22,4 @@ const googleButtonColorBorder = Color(0xFFF14336);
 const facebookButtonColor = Color(0xFFF5F9FF);
 const facebookButtonColorBorder = Color(0xFF3164CE);
 const discountColor = Color.fromARGB(255, 255, 132, 56);
+const asd = Color.fromARGB(255, 325, 132, 6);
