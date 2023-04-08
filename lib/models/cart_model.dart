@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 class Cart {
   Cart({
     required this.productId,
@@ -5,7 +8,6 @@ class Cart {
     required this.imageUrl,
     required this.quantity,
     required this.price,
-    required this.totalPrice,
   });
 
   final String? productId;
@@ -18,8 +20,6 @@ class Cart {
 
   final int price;
 
-  final int totalPrice;
-
   Cart.fromJson(Map<String, Object?> json)
       : this(
           productId: json['productId']! as String,
@@ -27,7 +27,6 @@ class Cart {
           imageUrl: json['imageUrl']! as List,
           quantity: json['quantity']! as int,
           price: json['price']! as int,
-          totalPrice: json['totalPrice']! as int,
         );
 
   Map<String, Object?> toJson() {
@@ -37,7 +36,18 @@ class Cart {
       'imageUrl': imageUrl,
       'quantity': quantity,
       'price': price,
-      'totalPrice': totalPrice,
     };
   }
+}
+
+User? user = FirebaseAuth.instance.currentUser;
+
+cartQuery() {
+  return FirebaseFirestore.instance
+      .collection('cart')
+      .doc(user!.uid)
+      .collection('products')
+      .withConverter<Cart>(
+          fromFirestore: (snapshot, _) => Cart.fromJson(snapshot.data()!),
+          toFirestore: (product, _) => product.toJson());
 }

@@ -1,8 +1,8 @@
 import 'package:ecommerceapp/constanst/color_constant.dart';
 import 'package:ecommerceapp/screens/account_screen.dart';
-import 'package:ecommerceapp/screens/cart_screen.dart';
+
 import 'package:ecommerceapp/screens/home/home_screen.dart';
-import 'package:ecommerceapp/screens/splash_screen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
@@ -20,7 +20,6 @@ class _MainScreen extends State<MainScreen> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
   static const List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
-    CartScreen(),
     AccountScreen(),
   ];
 
@@ -50,7 +49,7 @@ class _MainScreen extends State<MainScreen> {
               gap: 8,
               activeColor: primaryColor,
               iconSize: 24,
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              padding: EdgeInsets.symmetric(horizontal: 50, vertical: 12),
               duration: Duration(milliseconds: 400),
               tabBackgroundColor: Colors.grey[100]!,
               color: Colors.grey[600],
@@ -60,12 +59,8 @@ class _MainScreen extends State<MainScreen> {
                   text: 'Home',
                 ),
                 GButton(
-                  icon: LineIcons.shoppingCart,
-                  text: 'Cart',
-                ),
-                GButton(
                   icon: LineIcons.user,
-                  text: 'Profile',
+                  text: 'Me',
                 ),
               ],
               selectedIndex: _selectedIndex,

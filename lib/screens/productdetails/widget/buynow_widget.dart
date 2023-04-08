@@ -1,3 +1,4 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerceapp/screens/productdetails/widget/elevated_button.dart';
 import 'package:flutter/material.dart';

@@ -19,8 +19,6 @@ class ProductCard extends StatelessWidget {
     return FirestoreQueryBuilder<Product>(
       query: query,
       builder: (context, snapshot, _) {
-        // ...
-
         return GridView.builder(
           shrinkWrap: true,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

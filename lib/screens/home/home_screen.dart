@@ -1,5 +1,5 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:ecommerceapp/models/product_model.dart';
+import 'package:ecommerceapp/screens/cart/cart_screen.dart';
 import 'package:ecommerceapp/screens/home/widget/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
@@ -78,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     IconButton(
                       icon: const Icon(LineIcons.shoppingBag),
                       onPressed: () {
-                        print('12312312313');
+                        Navigator.pushNamed(context, CartScreen.id);
                       },
                     ),
                   ],

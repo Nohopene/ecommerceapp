@@ -123,7 +123,9 @@ class _ProductDetailState extends State<ProductDetail> {
                     title: 'Add to cart',
                     onPressed: () {
                       _service.checkCart(
-                          product: widget.product, productId: widget.productId);
+                          product: widget.product,
+                          productId: widget.productId,
+                          context: context);
                     },
                     backgroundColor: discountColor,
                   ),
@@ -320,7 +322,7 @@ PreferredSize Header(BuildContext context) {
       elevation: 0,
       backgroundColor: Colors.white,
       flexibleSpace: Padding(
-        padding: EdgeInsets.fromLTRB(1.5.h, 0, 1.5.h, 2.h),
+        padding: EdgeInsets.symmetric(horizontal: 1.5.h),
         child: Row(
           children: [
             GestureDetector(
