@@ -1,11 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ecommerceapp/widget/money_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/firestore.dart';
-import 'package:intl/intl.dart';
+
 import 'package:sizer/sizer.dart';
 
 import '../../../models/cart_model.dart';
-import '../../../widget/circle_icon_button.dart';
+
+import 'counted_widget.dart';
 
 class CartCard extends StatelessWidget {
   const CartCard({super.key});
@@ -16,6 +18,7 @@ class CartCard extends StatelessWidget {
       query: cartQuery(),
       builder: (context, snapshot, _) {
         return ListView.builder(
+          physics: AlwaysScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: snapshot.docs.length,
           itemBuilder: (context, index) {
@@ -29,9 +32,10 @@ class CartCard extends StatelessWidget {
 
             var cartIndex = snapshot.docs[index];
             Cart cart = cartIndex.data();
+            String docId = cartIndex.id;
             return InkWell(
               child: Container(
-                margin: EdgeInsets.fromLTRB(1.15.h, 1.15.h, 1.15.h, 1.15.h),
+                margin: EdgeInsets.fromLTRB(1.15.h, 1.h, 1.15.h, 1.h),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
@@ -48,7 +52,7 @@ class CartCard extends StatelessWidget {
                             child: CachedNetworkImage(
                               width: 90,
                               height: 90,
-                              imageUrl: cart.imageUrl[1],
+                              imageUrl: cart.imageUrl[0],
                               fit: BoxFit.contain,
                               progressIndicatorBuilder:
                                   (context, url, downloadProgress) => Center(
@@ -78,55 +82,17 @@ class CartCard extends StatelessWidget {
                                             0, 5, 0, 0),
                                     child: Row(
                                       children: [
-                                        Text(
-                                          NumberFormat.simpleCurrency(
-                                                  decimalDigits: 0,
-                                                  locale: 'vi-VN')
-                                              .format(cart.price),
-                                          style: const TextStyle(
-                                            color: Colors.red,
-                                            fontSize: 13,
-                                          ),
-                                        ),
+                                        MoneyWidget(
+                                            size: 13, value: cart.price),
                                         SizedBox(
                                           width: 2.h,
                                         ),
                                       ],
                                     ),
                                   ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsetsDirectional.fromSTEB(
-                                            0, 5, 0, 0),
-                                    child: Row(
-                                      children: [
-                                        CircleIconButton(
-                                          svgIcon: 'assets/icons/subtract.svg',
-                                          color: Color(0xFFF5F6F9),
-                                          size: 1.2.h,
-                                          onPressed: cart.quantity > 1
-                                              ? () => {}
-                                              : () {},
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 1.15.h),
-                                          child: Text(
-                                            '${cart.quantity}',
-                                            style:
-                                                const TextStyle(fontSize: 14),
-                                          ),
-                                        ),
-                                        CircleIconButton(
-                                          svgIcon: 'assets/icons/add.svg',
-                                          color: Color(0xFFF5F6F9),
-                                          size: 1.2.h,
-                                          onPressed: cart.quantity > 1
-                                              ? () => {}
-                                              : () {},
-                                        ),
-                                      ],
-                                    ),
+                                  CountedWidget(
+                                    cart: cart,
+                                    docId: docId,
                                   ),
                                 ],
                               ),

@@ -35,7 +35,7 @@ class Product {
 
   final String? descriptions;
 
-  final double rating;
+  final int? rating;
 
   final bool isAvailable;
 
@@ -62,7 +62,7 @@ class Product {
           descriptions: json['descriptions'] == null
               ? null
               : json['descriptions']! as String,
-          rating: json['rating']! as double,
+          rating: json['rating'] == null ? null : json['rating']! as int,
           isAvailable: json['isAvailable']! as bool,
           createdAt: json['createdAt'] == null
               ? null

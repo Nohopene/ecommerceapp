@@ -3,13 +3,16 @@ import 'package:ecommerceapp/screens/cart/cart_screen.dart';
 import 'package:ecommerceapp/screens/home/widget/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import 'package:badges/badges.dart' as badges;
 
 import 'package:ecommerceapp/constanst/color_constant.dart';
 import 'package:ecommerceapp/screens/home/widget/category_banner.dart';
 import 'package:ecommerceapp/screens/home/widget/promo_widget.dart';
 import 'package:ecommerceapp/screens/home/widget/research_widget.dart';
 
+import '../../providers/cart_provider.dart';
 import 'widget/home_banner.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -55,6 +58,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   PreferredSize homeHeader() {
+    final cartProvider = Provider.of<CartProvider>(context);
+    cartProvider.getCartTotal();
     return PreferredSize(
       preferredSize: Size.fromHeight(15.h),
       child: AppBar(
@@ -75,11 +80,25 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: primaryColor),
                     ),
                     const Spacer(),
-                    IconButton(
-                      icon: const Icon(LineIcons.shoppingBag),
-                      onPressed: () {
-                        Navigator.pushNamed(context, CartScreen.id);
-                      },
+                    badges.Badge(
+                      position: badges.BadgePosition.topEnd(top: 0, end: 3),
+                      badgeAnimation: const badges.BadgeAnimation.slide(
+                        disappearanceFadeAnimationDuration:
+                            Duration(milliseconds: 200),
+                        curve: Curves.easeInCubic,
+                      ),
+                      badgeStyle: const badges.BadgeStyle(
+                        badgeColor: primaryColor,
+                      ),
+                      badgeContent: Text(
+                        cartProvider.cartQty.toString(),
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      child: IconButton(
+                          icon: const Icon(LineIcons.shoppingBag),
+                          onPressed: () {
+                            Navigator.pushNamed(context, CartScreen.id);
+                          }),
                     ),
                   ],
                 ),
@@ -115,9 +134,10 @@ class ProductWidget extends StatelessWidget {
             children: [
               Text(
                 widgetTile,
-                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+                style:
+                    const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
               ),
-              Text(
+              const Text(
                 'See all',
                 style:
                     TextStyle(fontWeight: FontWeight.w500, color: primaryColor),

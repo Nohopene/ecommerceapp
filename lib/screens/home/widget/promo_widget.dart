@@ -23,7 +23,7 @@ class PromoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       scrollDirection: Axis.horizontal,
       child: Padding(
         padding: EdgeInsets.symmetric(
@@ -48,7 +48,7 @@ class PromoWidget extends StatelessWidget {
       padding: EdgeInsets.all(1.8.h),
       margin: EdgeInsets.only(right: 2.h),
       decoration: BoxDecoration(
-        border: Border(
+        border: const Border(
           left: BorderSide(color: primaryColor, width: 6),
         ),
         color: Colors.white,
@@ -57,7 +57,7 @@ class PromoWidget extends StatelessWidget {
             blurRadius: 1,
             spreadRadius: 1,
             color: cardShadowColor.withOpacity(0.3),
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -66,12 +66,12 @@ class PromoWidget extends StatelessWidget {
         children: [
           Text(
             content,
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+            style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
             maxLines: 2,
             textWidthBasis: TextWidthBasis.longestLine,
           ),
           const SizedBox(height: 5),
-          Text("EXP: " + expireDate),
+          Text("EXP: $expireDate"),
         ],
       ),
     );

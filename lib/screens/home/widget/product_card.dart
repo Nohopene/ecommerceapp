@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerceapp/models/product_model.dart';
 import 'package:ecommerceapp/screens/productdetails/productdetail_screen.dart';
+import 'package:ecommerceapp/widget/money_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutterfire_ui/firestore.dart';
@@ -20,6 +21,7 @@ class ProductCard extends StatelessWidget {
       query: query,
       builder: (context, snapshot, _) {
         return GridView.builder(
+          physics: ScrollPhysics(),
           shrinkWrap: true,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
@@ -50,7 +52,7 @@ class ProductCard extends StatelessWidget {
                             )));
               },
               child: Container(
-                margin: EdgeInsets.fromLTRB(2.h, 0, 2.h, 2.h),
+                margin: EdgeInsets.fromLTRB(2.h, 0, 1.5.h, 2.h),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
@@ -59,7 +61,7 @@ class ProductCard extends StatelessWidget {
                       color: Colors.grey.withOpacity(0.3),
                       spreadRadius: 2,
                       blurRadius: 5,
-                      offset: Offset(0, 2), // changes position of shadow
+                      offset: const Offset(0, 2), // changes position of shadow
                     ),
                   ],
                 ),
@@ -118,17 +120,8 @@ class ProductCard extends StatelessWidget {
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        NumberFormat.simpleCurrency(
-                                                decimalDigits: 0,
-                                                locale: 'vi-VN')
-                                            .format(product.price),
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.red,
-                                          fontSize: 12,
-                                        ),
-                                      ),
+                                      MoneyWidget(
+                                          size: 12, value: product.price),
                                       if (product.percentOff! > 0)
                                         Padding(
                                           padding: EdgeInsets.only(left: 1.h),
@@ -157,7 +150,7 @@ class ProductCard extends StatelessWidget {
                                       color: primaryColor,
                                     ),
                                     direction: Axis.horizontal,
-                                    rating: product.rating,
+                                    rating: product.rating!.toDouble(),
                                     unratedColor: const Color(0xFF9E9E9E),
                                     itemCount: 5,
                                     itemSize: 12,
@@ -190,13 +183,13 @@ class ProductCard extends StatelessWidget {
           alignment: Alignment.center,
           height: 6.h,
           padding: EdgeInsets.symmetric(horizontal: 0.8.h),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             borderRadius: BorderRadius.only(topRight: Radius.circular(12)),
             color: discountColor,
           ),
           child: Text(
             '-${product.percentOff}%',
-            style: TextStyle(
+            style: const TextStyle(
                 fontWeight: FontWeight.w500, fontSize: 12, color: Colors.white),
           ),
         ),

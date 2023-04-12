@@ -17,7 +17,7 @@ class CategoryBanner extends StatefulWidget {
 }
 
 class _CategoryBannerState extends State<CategoryBanner> {
-  String? _selectedCategory;
+  String? _selectedCategory = 'Mouse';
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,7 +31,7 @@ class _CategoryBannerState extends State<CategoryBanner> {
             padding: EdgeInsets.fromLTRB(2.h, 0, 2.h, 2.h),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+              children: const [
                 Text(
                   'PRODUCT BY CATEGORY',
                   style: TextStyle(

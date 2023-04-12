@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerceapp/constanst/color_constant.dart';
 import 'package:ecommerceapp/models/product_model.dart';
 import 'package:ecommerceapp/screens/productdetails/widget/buynow_widget.dart';
@@ -8,6 +7,7 @@ import 'package:ecommerceapp/screens/productdetails/widget/product_image.dart';
 import 'package:ecommerceapp/screens/productdetails/widget/product_infor.dart';
 import 'package:ecommerceapp/services/cart_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:badges/badges.dart' as badges;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -16,7 +16,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 
 import 'package:line_icons/line_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+
+import '../../providers/cart_provider.dart';
+import '../cart/cart_screen.dart';
 
 class ProductDetail extends StatefulWidget {
   final String? productId;
@@ -40,7 +44,7 @@ class _ProductDetailState extends State<ProductDetail> {
       child: SafeArea(
         child: Scaffold(
           backgroundColor: Colors.grey.shade200,
-          appBar: Header(context),
+          appBar: Header(),
           body: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.max,
@@ -94,12 +98,12 @@ class _ProductDetailState extends State<ProductDetail> {
                   color: Colors.grey,
                   height: 10,
                 ),
-                _productDescription(context),
+                _productDescription(),
                 const Divider(
                   color: Colors.grey,
                   height: 10,
                 ),
-                _productSpecifications(context),
+                _productSpecifications(),
                 const Divider(
                   color: Colors.grey,
                   height: 10,
@@ -207,7 +211,7 @@ class _ProductDetailState extends State<ProductDetail> {
                             color: primaryColor,
                           ),
                           direction: Axis.horizontal,
-                          rating: widget.product!.rating,
+                          rating: widget.product!.rating!.toDouble(),
                           unratedColor: const Color(0xFF9E9E9E),
                           itemCount: 5,
                           itemSize: 14,
@@ -232,7 +236,7 @@ class _ProductDetailState extends State<ProductDetail> {
     );
   }
 
-  Padding _productSpecifications(BuildContext context) {
+  Padding _productSpecifications() {
     return Padding(
       padding: EdgeInsetsDirectional.fromSTEB(1.5.h, 0, 1.5.h, 0),
       child: Column(
@@ -280,7 +284,7 @@ class _ProductDetailState extends State<ProductDetail> {
     );
   }
 
-  Padding _productDescription(BuildContext context) {
+  Padding _productDescription() {
     return Padding(
       padding: EdgeInsetsDirectional.fromSTEB(1.5.h, 0, 1.5.h, 0),
       child: Column(
@@ -313,43 +317,59 @@ class _ProductDetailState extends State<ProductDetail> {
       ),
     );
   }
-}
 
-PreferredSize Header(BuildContext context) {
-  return PreferredSize(
-    preferredSize: Size.fromHeight(7.h),
-    child: AppBar(
-      elevation: 0,
-      backgroundColor: Colors.white,
-      flexibleSpace: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 1.5.h),
-        child: Row(
-          children: [
-            GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Container(
-                height: 8.h,
-                width: 8.w,
-                padding: EdgeInsets.all(1.h),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color(0xFFF5F6F9),
+  PreferredSize Header() {
+    final cartProvider = Provider.of<CartProvider>(context);
+    cartProvider.getCartTotal();
+    return PreferredSize(
+      preferredSize: Size.fromHeight(7.h),
+      child: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        flexibleSpace: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 1.5.h),
+          child: Row(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  height: 8.h,
+                  width: 8.w,
+                  padding: EdgeInsets.all(1.h),
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0xFFF5F6F9),
+                  ),
+                  child: SvgPicture.asset('assets/icons/cancel.svg'),
                 ),
-                child: SvgPicture.asset('assets/icons/cancel.svg'),
               ),
-            ),
-            const Spacer(),
-            IconButton(
-              icon: const Icon(LineIcons.shoppingBag),
-              onPressed: () {
-                print('12312312313');
-              },
-            ),
-          ],
+              const Spacer(),
+              badges.Badge(
+                position: badges.BadgePosition.topEnd(top: 0, end: 3),
+                badgeAnimation: const badges.BadgeAnimation.slide(
+                  disappearanceFadeAnimationDuration:
+                      Duration(milliseconds: 200),
+                  curve: Curves.easeInCubic,
+                ),
+                badgeStyle: const badges.BadgeStyle(
+                  badgeColor: primaryColor,
+                ),
+                badgeContent: Text(
+                  cartProvider.cartQty.toString(),
+                  style: const TextStyle(color: Colors.white),
+                ),
+                child: IconButton(
+                    icon: const Icon(LineIcons.shoppingBag),
+                    onPressed: () {
+                      Navigator.pushNamed(context, CartScreen.id);
+                    }),
+              ),
+            ],
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:ecommerceapp/providers/cart_provider.dart';
 import 'package:ecommerceapp/screens/cart/cart_screen.dart';
 import 'package:ecommerceapp/screens/login/otp_screen.dart';
 import 'package:ecommerceapp/screens/main_screen.dart';
@@ -6,6 +7,7 @@ import 'package:ecommerceapp/screens/onboarding_screen.dart';
 import 'package:ecommerceapp/screens/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import 'firebase_options.dart';
@@ -15,7 +17,10 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [ChangeNotifierProvider(create: (_) => CartProvider())],
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -27,7 +32,7 @@ class MyApp extends StatelessWidget {
       builder: (context, orientation, deviceType) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          initialRoute: MainScreen.id,
+          initialRoute: SplashScreen.id,
           routes: {
             SplashScreen.id: (context) => const SplashScreen(),
             OnboardingScreen.id: (context) => const OnboardingScreen(),

@@ -100,12 +100,12 @@ class DotIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       height: 1.h,
       width: isActive ? 5.w : 2.w,
       decoration: BoxDecoration(
           color: isActive ? primaryColor : primaryColor.withOpacity(0.4),
-          borderRadius: BorderRadius.all(Radius.circular(12))),
+          borderRadius: const BorderRadius.all(Radius.circular(12))),
     );
   }
 }

@@ -61,7 +61,7 @@ class BuyNowWidget extends StatelessWidget {
                               color: primaryColor,
                             ),
                             direction: Axis.horizontal,
-                            rating: product!.rating,
+                            rating: product!.rating!.toDouble(),
                             unratedColor: const Color(0xFF9E9E9E),
                             itemCount: 5,
                             itemSize: 12,
