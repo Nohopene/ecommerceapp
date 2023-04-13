@@ -1,5 +1,6 @@
 import 'package:ecommerceapp/providers/cart_provider.dart';
 import 'package:ecommerceapp/screens/cart/cart_screen.dart';
+import 'package:ecommerceapp/screens/deliveryaddress/deliveyaddress_screen.dart';
 import 'package:ecommerceapp/screens/login/otp_screen.dart';
 import 'package:ecommerceapp/screens/main_screen.dart';
 import 'package:ecommerceapp/screens/login/login_screen.dart';
@@ -41,7 +42,8 @@ class MyApp extends StatelessWidget {
             MainScreen.id: (context) => const MainScreen(),
             OTPScreen.id: (context) => const OTPScreen(),
             CartScreen.id: (context) => const CartScreen(),
-            OrderScreen.id: (context) => const OrderScreen()
+            OrderScreen.id: (context) => const OrderScreen(),
+            AddressScreen.id: (context) => const AddressScreen()
           },
         );
       },

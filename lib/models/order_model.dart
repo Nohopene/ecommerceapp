@@ -2,8 +2,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class OrderModel {
-  OrderModel({
+class Order {
+  Order({
     required this.orderName,
     required this.address,
     required this.phone,
@@ -29,7 +29,7 @@ class OrderModel {
 
   final int price;
 
-  OrderModel.fromJson(Map<String, Object?> json)
+  Order.fromJson(Map<String, Object?> json)
       : this(
           orderName:
               json['orderName'] == null ? null : json['orderName']! as String,
@@ -62,12 +62,12 @@ class OrderModel {
 
 User? user = FirebaseAuth.instance.currentUser;
 
-orderQuery() {
-  return FirebaseFirestore.instance
-      .collection('orders')
-      .doc(user!.uid)
-      .collection('products')
-      .withConverter<OrderModel>(
-          fromFirestore: (snapshot, _) => OrderModel.fromJson(snapshot.data()!),
-          toFirestore: (order, _) => order.toJson());
-}
+// orderQuery() {
+//   return FirebaseFirestore.instance
+//       .collection('orders')
+//       .doc(user!.uid)
+//       .collection('products')
+//       .withConverter<OrderModel>(
+//           fromFirestore: (snapshot, _) => OrderModel.fromJson(snapshot.data()!),
+//           toFirestore: (order, _) => order.toJson());
+// }

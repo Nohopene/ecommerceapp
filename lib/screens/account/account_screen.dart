@@ -1,5 +1,7 @@
 import 'package:ecommerceapp/screens/account/widget/custom_listtitle.dart';
 import 'package:ecommerceapp/screens/account/widget/header_widget.dart';
+import 'package:ecommerceapp/screens/deliveryaddress/deliveyaddress_screen.dart';
+import 'package:ecommerceapp/screens/home/widget/test.dart';
 import 'package:ecommerceapp/screens/onboarding_screen.dart';
 import 'package:ecommerceapp/screens/order/order_sceen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,19 +26,21 @@ class AccountScreen extends StatelessWidget {
             _buildProfileMenuButton(
               text: 'Edit profile',
               icon: 'assets/icons/User.svg',
+              onPressed: () {},
+            ),
+            _buildProfileMenuButton(
+              text: 'My orders',
+              icon: 'assets/icons/order.svg',
               onPressed: () {
                 Navigator.pushNamed(context, OrderScreen.id);
               },
             ),
             _buildProfileMenuButton(
-              text: 'My orders',
-              icon: 'assets/icons/order.svg',
-              onPressed: () {},
-            ),
-            _buildProfileMenuButton(
               text: 'Delivery address',
               icon: 'assets/icons/location.svg',
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, AddressScreen.id);
+              },
             ),
           ],
         ),

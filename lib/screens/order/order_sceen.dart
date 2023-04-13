@@ -1,10 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:ecommerceapp/models/order_model.dart';
-import 'package:ecommerceapp/screens/cart/widget/cart_card.dart';
-import 'package:ecommerceapp/screens/home/widget/product_card.dart';
 import 'package:ecommerceapp/screens/order/widget/order_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterfire_ui/firestore.dart';
+
 import 'package:sizer/sizer.dart';
 
 import '../../widget/circle_icon_button.dart';
@@ -22,52 +18,9 @@ class _OrderScreenState extends State<OrderScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      backgroundColor: Colors.grey.shade200,
-      appBar: header(),
-      body: FirestoreQueryBuilder<OrderModel>(
-        query: orderQuery(),
-        builder: (context, snapshot, _) {
-          return ListView.builder(
-            physics: AlwaysScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: snapshot.docs.length,
-            itemBuilder: (context, index) {
-              // if we reached the end of the currently obtained items, we try to
-              // obtain more items
-              if (snapshot.hasMore && index + 1 == snapshot.docs.length) {
-                // Tell FirestoreQueryBuilder to try to obtain more items.
-                // It is safe to call this function from within the build method.
-                snapshot.fetchMore();
-              }
-
-              var orderIndex = snapshot.docs[index];
-              OrderModel order = orderIndex.data();
-
-              return InkWell(
-                child: Container(
-                  margin: EdgeInsets.fromLTRB(1.15.h, 1.h, 1.15.h, 1.h),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(2.h),
-                        child: Row(
-                          children: [Text('sdngkdsfhgsd')],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
-        },
-      ),
-    ));
+            backgroundColor: Colors.grey.shade200,
+            appBar: header(),
+            body: const OrderCard()));
   }
 
   PreferredSize header() {

@@ -1,6 +1,8 @@
 import 'package:ecommerceapp/models/product_model.dart';
+import 'package:ecommerceapp/screens/cart/widget/cart_card.dart';
 
 import 'package:ecommerceapp/screens/home/widget/product_card.dart';
+import 'package:ecommerceapp/screens/home/widget/test.dart';
 import 'package:flutter/material.dart';
 
 import 'package:sizer/sizer.dart';
