@@ -22,7 +22,7 @@ class CircleIconButton extends StatelessWidget {
     return InkWell(
       onTap: onPressed as void Function()?,
       child: Container(
-        padding: EdgeInsets.all(5),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: color,
           shape: BoxShape.circle,

@@ -1,26 +1,25 @@
 import 'package:ecommerceapp/constanst/color_constant.dart';
 import 'package:ecommerceapp/models/product_model.dart';
 import 'package:ecommerceapp/screens/productdetails/widget/buynow_widget.dart';
+import 'package:ecommerceapp/screens/productdetails/widget/description_widget.dart';
 import 'package:ecommerceapp/screens/productdetails/widget/elevated_button.dart';
-import 'package:ecommerceapp/screens/productdetails/widget/product_description.dart';
 import 'package:ecommerceapp/screens/productdetails/widget/product_image.dart';
-import 'package:ecommerceapp/screens/productdetails/widget/product_infor.dart';
+
+import 'package:ecommerceapp/screens/productdetails/widget/review_widget.dart';
+import 'package:ecommerceapp/screens/productdetails/widget/specification_widget.dart';
 import 'package:ecommerceapp/services/cart_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:badges/badges.dart' as badges;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 
-import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../providers/cart_provider.dart';
-import '../cart/cart_screen.dart';
+import '../../widget/shoppingbag_widget.dart';
 
 class ProductDetail extends StatefulWidget {
   final String? productId;
@@ -98,17 +97,17 @@ class _ProductDetailState extends State<ProductDetail> {
                   color: Colors.grey,
                   height: 10,
                 ),
-                _productDescription(),
+                DescriptionWidget(widget: widget),
                 const Divider(
                   color: Colors.grey,
                   height: 10,
                 ),
-                _productSpecifications(),
+                SpecificationWidget(widget: widget),
                 const Divider(
                   color: Colors.grey,
                   height: 10,
                 ),
-                _productReviews(),
+                ReviewWidget(widget: widget),
                 const Divider(
                   color: Colors.grey,
                   height: 10,
@@ -159,165 +158,6 @@ class _ProductDetailState extends State<ProductDetail> {
     );
   }
 
-  Padding _productReviews() {
-    return Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(1.5.h, 0, 1.5.h, 0),
-      child: Column(
-        children: [
-          SizedBox(
-            height: 40,
-            child: InkWell(
-              onTap: () {},
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Product Reviews',
-                        style: TextStyle(
-                          color: Colors.grey.shade600,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const Spacer(),
-                      const Text(
-                        'See all',
-                        style: TextStyle(
-                          color: primaryColor,
-                          fontSize: 14,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        color: Colors.grey.shade600,
-                        size: 16,
-                      )
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(0),
-                    child: Row(
-                      children: [
-                        RatingBarIndicator(
-                          itemBuilder: (context, index) => const Icon(
-                            Icons.star_rounded,
-                            color: primaryColor,
-                          ),
-                          direction: Axis.horizontal,
-                          rating: widget.product!.rating!.toDouble(),
-                          unratedColor: const Color(0xFF9E9E9E),
-                          itemCount: 5,
-                          itemSize: 14,
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          '${widget.product!.rating}/5',
-                          style: const TextStyle(
-                              fontSize: 13, color: primaryColor),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Padding _productSpecifications() {
-    return Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(1.5.h, 0, 1.5.h, 0),
-      child: Column(
-        children: [
-          InkWell(
-            onTap: () {
-              showModalBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    return InformationWidget(
-                      product: widget.product,
-                    );
-                  });
-            },
-            child: SizedBox(
-              height: 40,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Specifications',
-                        style: TextStyle(
-                          color: Colors.grey.shade600,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const Spacer(),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        color: Colors.grey.shade600,
-                        size: 16,
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Padding _productDescription() {
-    return Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(1.5.h, 0, 1.5.h, 0),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            '${widget.product!.descriptions}',
-            maxLines: 3,
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          InkWell(
-            onTap: () {
-              showModalBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    return ProductDescription(
-                      product: widget.product,
-                    );
-                  });
-            },
-            child: const Text(
-              'See all',
-              style: TextStyle(color: primaryColor),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   PreferredSize Header() {
     final cartProvider = Provider.of<CartProvider>(context);
     cartProvider.getCartTotal();
@@ -346,26 +186,7 @@ class _ProductDetailState extends State<ProductDetail> {
                 ),
               ),
               const Spacer(),
-              badges.Badge(
-                position: badges.BadgePosition.topEnd(top: 0, end: 3),
-                badgeAnimation: const badges.BadgeAnimation.slide(
-                  disappearanceFadeAnimationDuration:
-                      Duration(milliseconds: 200),
-                  curve: Curves.easeInCubic,
-                ),
-                badgeStyle: const badges.BadgeStyle(
-                  badgeColor: primaryColor,
-                ),
-                badgeContent: Text(
-                  cartProvider.cartQty.toString(),
-                  style: const TextStyle(color: Colors.white),
-                ),
-                child: IconButton(
-                    icon: const Icon(LineIcons.shoppingBag),
-                    onPressed: () {
-                      Navigator.pushNamed(context, CartScreen.id);
-                    }),
-              ),
+              const Shoppingbag_Widget(),
             ],
           ),
         ),

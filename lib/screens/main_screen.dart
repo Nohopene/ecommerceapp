@@ -1,5 +1,5 @@
 import 'package:ecommerceapp/constanst/color_constant.dart';
-import 'package:ecommerceapp/screens/account_screen.dart';
+import 'package:ecommerceapp/screens/account/account_screen.dart';
 
 import 'package:ecommerceapp/screens/home/home_screen.dart';
 
@@ -11,13 +11,12 @@ class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
   static const String id = 'main-screen';
   @override
+  // ignore: library_private_types_in_public_api
   _MainScreen createState() => _MainScreen();
 }
 
 class _MainScreen extends State<MainScreen> {
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
   static const List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
     AccountScreen(),
@@ -49,11 +48,11 @@ class _MainScreen extends State<MainScreen> {
               gap: 8,
               activeColor: primaryColor,
               iconSize: 24,
-              padding: EdgeInsets.symmetric(horizontal: 50, vertical: 12),
-              duration: Duration(milliseconds: 400),
+              padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 12),
+              duration: const Duration(milliseconds: 400),
               tabBackgroundColor: Colors.grey[100]!,
               color: Colors.grey[600],
-              tabs: [
+              tabs: const [
                 GButton(
                   icon: LineIcons.home,
                   text: 'Home',

@@ -1,7 +1,11 @@
 import 'package:ecommerceapp/providers/cart_provider.dart';
 import 'package:ecommerceapp/screens/cart/widget/cart_card.dart';
+import 'package:ecommerceapp/screens/main_screen.dart';
+import 'package:ecommerceapp/services/cart_service.dart';
+import 'package:ecommerceapp/services/order_service.dart';
 
 import 'package:ecommerceapp/widget/money_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -29,7 +33,7 @@ class _CartScreenState extends State<CartScreen> {
 
     return SafeArea(
       child: Scaffold(
-        appBar: Header(context),
+        appBar: header(),
         backgroundColor: Colors.grey.shade200,
         body: cartProvider.cartQty > 0
             ? const CartCard()
@@ -43,7 +47,8 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
-  PreferredSize Header(BuildContext context) {
+  PreferredSize header() {
+    CartService service = CartService();
     return PreferredSize(
       preferredSize: Size.fromHeight(6.5.h),
       child: AppBar(
@@ -73,7 +78,7 @@ class _CartScreenState extends State<CartScreen> {
                   size: 25,
                 ),
                 onPressed: () {
-                  print('12312312313');
+                  service.deleteCart();
                 },
               ),
             ],
@@ -94,6 +99,9 @@ class CheckOutWidget extends StatefulWidget {
 }
 
 class _CheckOutWidgetState extends State<CheckOutWidget> {
+  OrderService orderService = OrderService();
+  User? user = FirebaseAuth.instance.currentUser;
+  CartService service = CartService();
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
@@ -141,7 +149,9 @@ class _CheckOutWidgetState extends State<CheckOutWidget> {
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                _saveOrder(cartProvider);
+              },
               style: ElevatedButton.styleFrom(
                   backgroundColor: primaryColor,
                   shape: RoundedRectangleBorder(
@@ -159,5 +169,22 @@ class _CheckOutWidgetState extends State<CheckOutWidget> {
         ),
       ),
     );
+  }
+
+  _saveOrder(CartProvider cartProvider) {
+    orderService.saveOrder({
+      'products': cartProvider.cartList,
+      'uid': user?.uid,
+      'total': cartProvider.subTotal,
+      'orderAt': DateTime.now().toString(),
+      'status': 'Process',
+      'deliveryAddress': {
+        'orderName': '',
+        'phone': '',
+        'address': '',
+      }
+    }).then((value) => service
+        .deleteCart()
+        .then((value) => Navigator.popAndPushNamed(context, MainScreen.id)));
   }
 }

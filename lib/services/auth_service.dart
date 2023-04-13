@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerceapp/models/user_model.dart';
 import 'package:ecommerceapp/screens/login/otp_screen.dart';
 import 'package:ecommerceapp/screens/main_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -70,4 +71,11 @@ class PhoneAuthService {
       }
     }
   }
+
+  // Future<UserModel> getUser() async {
+  //   final snapshot = await _firebaseFirestore
+  //       .collection('Users')
+  //       .where('uid', isEqualTo: _uid)
+  //       .get();
+  // }
 }
