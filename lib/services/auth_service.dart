@@ -57,12 +57,13 @@ class PhoneAuthService {
       try {
         return _firebaseFirestore.collection("users").doc(_uid).set({
           'uid': auth.currentUser!.uid,
-          'name': null,
+          'name': '',
           'phone': auth.currentUser!.phoneNumber,
           'email': auth.currentUser!.email,
-          'birthday': null,
-          'bio': null,
-          'image': null
+          'birthday': '',
+          'gender': '',
+          'bio': '',
+          'image': ''
         }).then((value) {
           Navigator.pushReplacementNamed(context, MainScreen.id);
         });

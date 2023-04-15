@@ -1,9 +1,10 @@
 import 'package:ecommerceapp/screens/account/widget/custom_listtitle.dart';
 import 'package:ecommerceapp/screens/account/widget/header_widget.dart';
 import 'package:ecommerceapp/screens/deliveryaddress/deliveyaddress_screen.dart';
-import 'package:ecommerceapp/screens/home/widget/test.dart';
+
 import 'package:ecommerceapp/screens/onboarding_screen.dart';
 import 'package:ecommerceapp/screens/order/order_sceen.dart';
+import 'package:ecommerceapp/screens/profile/profile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -22,11 +23,18 @@ class AccountScreen extends StatelessWidget {
       child: Scaffold(
         body: Column(
           children: [
-            const HeaderProfileWidget(),
+            HeaderProfileWidget(
+              height: 30.h,
+              heightAva: 15.h,
+              widthAva: 30.w,
+              size: 2.h,
+            ),
             _buildProfileMenuButton(
               text: 'Edit profile',
               icon: 'assets/icons/User.svg',
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, ProfileScreen.id);
+              },
             ),
             _buildProfileMenuButton(
               text: 'My orders',

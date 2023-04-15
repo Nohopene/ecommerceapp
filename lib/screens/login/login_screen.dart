@@ -8,8 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sizer/sizer.dart';
 
-import 'otp_screen.dart';
-
 class LoginScreen extends StatefulWidget {
   static const String id = 'login-screen';
 

@@ -10,8 +10,12 @@ import '../../../widget/circle_icon_button.dart';
 class HeaderProfileWidget extends StatelessWidget {
   const HeaderProfileWidget({
     super.key,
+    required this.height,
+    required this.heightAva,
+    required this.widthAva,
+    required this.size,
   });
-
+  final double height, heightAva, widthAva, size;
   @override
   Widget build(BuildContext context) {
     return FirestoreQueryBuilder<UserModel>(
@@ -33,7 +37,7 @@ class HeaderProfileWidget extends StatelessWidget {
               UserModel userModel = user.data();
               return Container(
                 width: double.infinity,
-                height: 30.h,
+                height: height,
                 color: primaryColor,
                 child: Center(
                     child: Column(
@@ -43,14 +47,14 @@ class HeaderProfileWidget extends StatelessWidget {
                       clipBehavior: Clip.none,
                       children: [
                         Container(
-                          height: 15.h,
-                          width: 30.w,
+                          height: heightAva,
+                          width: widthAva,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(color: Colors.white, width: 2),
                           ),
                           child: CircleAvatar(
-                            backgroundImage: userModel.image == null
+                            backgroundImage: userModel.image!.isEmpty
                                 ? const AssetImage(
                                     'assets/images/default_avatar.jpg')
                                 : CachedNetworkImageProvider(
@@ -65,7 +69,7 @@ class HeaderProfileWidget extends StatelessWidget {
                             onPressed: () {},
                             svgIcon: 'assets/icons/Camera Icon.svg',
                             color: cardShadowColor,
-                            size: 2.h,
+                            size: size,
                           ),
                         )
                       ],

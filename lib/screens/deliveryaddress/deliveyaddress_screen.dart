@@ -1,78 +1,46 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerceapp/constanst/color_constant.dart';
+import 'package:ecommerceapp/providers/location_provider.dart';
+import 'package:ecommerceapp/screens/deliveryaddress/widget/add_address.dart';
+import 'package:ecommerceapp/screens/deliveryaddress/widget/delivery_card.dart';
+import 'package:ecommerceapp/screens/deliveryaddress/widget/googlemap_widget.dart';
+import 'package:ecommerceapp/services/address_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../widget/circle_icon_button.dart';
-import '../../widget/location_widget.dart';
 
 class AddressScreen extends StatefulWidget {
   static const String id = 'address-screen';
-  const AddressScreen({super.key});
-
+  const AddressScreen({super.key, this.address});
+  final String? address;
   @override
   State<AddressScreen> createState() => _AddressScreenState();
 }
 
 class _AddressScreenState extends State<AddressScreen> {
+  User? user = FirebaseAuth.instance.currentUser;
+  AddressService _service = AddressService();
   @override
   Widget build(BuildContext context) {
+    final locationData = Provider.of<LocationProvider>(context);
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.grey.shade300,
         appBar: header(),
         body: Column(children: [
-          // Form(
-          //   child: Padding(
-          //     padding: const EdgeInsets.all(16.0),
-          //     child: TextFormField(
-          //       onChanged: (value) {},
-          //       textInputAction: TextInputAction.search,
-          //       decoration: InputDecoration(
-          //         contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-          //         hintText: 'Search your location',
-          //         prefixIcon: Padding(
-          //           padding: const EdgeInsets.symmetric(vertical: 12),
-          //           child: SvgPicture.asset(
-          //             'assets/icons/location.svg',
-          //             color: const Color(0xFF585858),
-          //           ),
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          const Divider(
-            height: 4,
-            thickness: 4,
-            color: Color(0xFFF8F8F8),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton.icon(
-              onPressed: () {},
-              icon: SvgPicture.asset(
-                'assets/icons/navigation.svg',
-                height: 16,
-              ),
-              label: const Text('User my Current Location'),
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFEEEEEE),
-                  foregroundColor: const Color(0xFF0D0D0E),
-                  elevation: 0,
-                  fixedSize: const Size(double.infinity, 40),
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)))),
-            ),
-          ),
-          const Divider(
-            height: 4,
-            thickness: 4,
-            color: Color(0xFFF8F8F8),
-          ),
-          LocationListTitle(
-            location: 'Thanh Xuan, Ha Noi, Viet Nam',
-            press: () {},
-          )
+          DeliveryCard(),
+          TextButton.icon(
+              onPressed: () {
+                Navigator.pushNamed(context, AddAddressScreen.id);
+              },
+              icon: const Icon(Icons.add),
+              label: const Text('Add new address'))
         ]),
       ),
     );

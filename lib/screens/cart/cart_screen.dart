@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:ecommerceapp/providers/cart_provider.dart';
 import 'package:ecommerceapp/screens/cart/widget/cart_card.dart';
 import 'package:ecommerceapp/screens/main_screen.dart';
@@ -9,12 +11,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:geocoder/geocoder.dart';
 
 import 'package:sizer/sizer.dart';
 import 'package:provider/provider.dart';
 
 import '../../constanst/color_constant.dart';
 
+import '../../providers/location_provider.dart';
 import '../../widget/circle_icon_button.dart';
 
 class CartScreen extends StatefulWidget {
@@ -106,6 +110,8 @@ class _CheckOutWidgetState extends State<CheckOutWidget> {
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
     cartProvider.getCartTotal();
+    final locationProvider = Provider.of<LocationProvider>(context);
+    locationProvider.getAdress();
     return Container(
       height: 120,
       color: Colors.white,
@@ -150,7 +156,7 @@ class _CheckOutWidgetState extends State<CheckOutWidget> {
             ),
             ElevatedButton(
               onPressed: () {
-                _saveOrder(cartProvider);
+                _saveOrder(cartProvider, locationProvider);
               },
               style: ElevatedButton.styleFrom(
                   backgroundColor: primaryColor,
@@ -171,17 +177,22 @@ class _CheckOutWidgetState extends State<CheckOutWidget> {
     );
   }
 
-  _saveOrder(CartProvider cartProvider) {
+  int random(int min, int max) {
+    return min + Random().nextInt(max - min);
+  }
+
+  _saveOrder(CartProvider cartProvider, LocationProvider locationProvider) {
     orderService.saveOrder({
+      'orderId': 'order${random(0, 100000)}',
       'products': cartProvider.cartList,
       'uid': user?.uid,
       'total': cartProvider.subTotal,
       'orderAt': DateTime.now().toString(),
       'status': 'Process',
       'deliveryAddress': {
-        'orderName': '',
-        'phone': '',
-        'address': '',
+        'orderName': locationProvider.name,
+        'phone': locationProvider.phone,
+        'address': locationProvider.address
       }
     }).then((value) => service
         .deleteCart()
