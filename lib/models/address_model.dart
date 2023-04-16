@@ -43,6 +43,18 @@ addressQuery() {
       .collection('address')
       .doc(user!.uid)
       .collection('address')
+      .orderBy('status', descending: true)
+      .withConverter<Address>(
+          fromFirestore: (snapshot, _) => Address.fromJson(snapshot.data()!),
+          toFirestore: (address, _) => address.toJson());
+}
+
+addressQuery1() {
+  return FirebaseFirestore.instance
+      .collection('address')
+      .doc(user!.uid)
+      .collection('address')
+      .where('status', isEqualTo: true)
       .withConverter<Address>(
           fromFirestore: (snapshot, _) => Address.fromJson(snapshot.data()!),
           toFirestore: (address, _) => address.toJson());

@@ -1,9 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:ecommerceapp/screens/profile/widget/rebio_widget.dart';
 import 'package:ecommerceapp/screens/profile/widget/rename_widget.dart';
 import 'package:ecommerceapp/services/user_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+import 'package:select_dialog/select_dialog.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../widget/circle_icon_button.dart';
@@ -20,6 +24,23 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   User? user = FirebaseAuth.instance.currentUser;
   UserService _service = UserService();
+  String ex1 = "";
+
+  void _showDatePicker() {
+    showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(1950),
+            lastDate: DateTime.now())
+        .then((value) {
+      setState(() {
+        if (value != null) {
+          _service.updateBirthday(birthday: value.toString());
+        }
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -85,7 +106,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       EditProfileWidget(
                         title: 'Gender',
-                        onpress: () {},
+                        onpress: () {
+                          var list = ['Male', 'Female', 'Other'];
+                          SelectDialog.showModal<String>(
+                            context,
+                            label: 'Gender',
+                            constraints: const BoxConstraints(
+                              maxHeight: 150,
+                            ),
+                            alwaysShowScrollBar: false,
+                            selectedValue: ex1,
+                            showSearchBox: false,
+                            items: List.from(list),
+                            onChange: (String selected) {
+                              setState(() {
+                                ex1 = selected;
+                                _service.updateGender(gender: selected);
+                              });
+                            },
+                          );
+                        },
                         value:
                             data['gender'] == '' ? 'Edit now' : data['gender'],
                       ),
@@ -94,10 +134,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       EditProfileWidget(
                         title: 'Birthday',
-                        onpress: () {},
+                        onpress: () {
+                          _showDatePicker();
+                        },
                         value: data['birthday'] == ''
                             ? 'Edit now'
-                            : data['birthday'],
+                            : DateFormat.yMMMd().format(
+                                DateTime.parse(data['birthday'].toString())),
                       ),
                     ],
                   );
@@ -138,6 +181,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
+}
+
+Widget _buildListItem(String title) {
+  return Column(
+    children: [
+      Container(
+        height: 48,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Expanded(child: Text(title)),
+          ],
+        ),
+      ),
+      const Divider(height: 0.5),
+    ],
+  );
 }
 
 class EditProfileWidget extends StatelessWidget {

@@ -1,8 +1,6 @@
-import 'dart:math';
-
 import 'package:ecommerceapp/providers/cart_provider.dart';
 import 'package:ecommerceapp/screens/cart/widget/cart_card.dart';
-import 'package:ecommerceapp/screens/main_screen.dart';
+import 'package:ecommerceapp/screens/cart/widget/checkout_dialog.dart';
 import 'package:ecommerceapp/services/cart_service.dart';
 import 'package:ecommerceapp/services/order_service.dart';
 
@@ -11,7 +9,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:geocoder/geocoder.dart';
 
 import 'package:sizer/sizer.dart';
 import 'package:provider/provider.dart';
@@ -156,7 +153,17 @@ class _CheckOutWidgetState extends State<CheckOutWidget> {
             ),
             ElevatedButton(
               onPressed: () {
-                _saveOrder(cartProvider, locationProvider);
+                showModalBottomSheet(
+                    backgroundColor: Colors.white,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20)),
+                    ),
+                    context: context,
+                    builder: (context) {
+                      return const CheckOutBottom();
+                    });
               },
               style: ElevatedButton.styleFrom(
                   backgroundColor: primaryColor,
@@ -175,27 +182,5 @@ class _CheckOutWidgetState extends State<CheckOutWidget> {
         ),
       ),
     );
-  }
-
-  int random(int min, int max) {
-    return min + Random().nextInt(max - min);
-  }
-
-  _saveOrder(CartProvider cartProvider, LocationProvider locationProvider) {
-    orderService.saveOrder({
-      'orderId': 'order${random(0, 100000)}',
-      'products': cartProvider.cartList,
-      'uid': user?.uid,
-      'total': cartProvider.subTotal,
-      'orderAt': DateTime.now().toString(),
-      'status': 'Process',
-      'deliveryAddress': {
-        'orderName': locationProvider.name,
-        'phone': locationProvider.phone,
-        'address': locationProvider.address
-      }
-    }).then((value) => service
-        .deleteCart()
-        .then((value) => Navigator.popAndPushNamed(context, MainScreen.id)));
   }
 }

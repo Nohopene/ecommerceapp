@@ -92,7 +92,9 @@ class _RenameWidgetState extends State<RenameWidget> {
               const Spacer(),
               TextButton(
                   onPressed: () {
-                    _service.updateName(name: nameController);
+                    _service
+                        .updateName(name: nameController.text)
+                        .then((value) => Navigator.pop(context));
                   },
                   child: const Text('Save'))
             ],

@@ -15,6 +15,7 @@ import 'package:ecommerceapp/screens/profile/widget/rename_widget.dart';
 import 'package:ecommerceapp/screens/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           initialRoute: MainScreen.id,
+          builder: EasyLoading.init(),
           routes: {
             SplashScreen.id: (context) => const SplashScreen(),
             OnboardingScreen.id: (context) => const OnboardingScreen(),

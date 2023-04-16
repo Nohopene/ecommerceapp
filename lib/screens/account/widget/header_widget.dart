@@ -1,13 +1,17 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/firestore.dart';
-import 'package:sizer/sizer.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../constanst/color_constant.dart';
 import '../../../models/user_model.dart';
+import '../../../services/user_service.dart';
 import '../../../widget/circle_icon_button.dart';
 
-class HeaderProfileWidget extends StatelessWidget {
+class HeaderProfileWidget extends StatefulWidget {
   const HeaderProfileWidget({
     super.key,
     required this.height,
@@ -16,8 +20,37 @@ class HeaderProfileWidget extends StatelessWidget {
     required this.size,
   });
   final double height, heightAva, widthAva, size;
+
+  @override
+  State<HeaderProfileWidget> createState() => _HeaderProfileWidgetState();
+}
+
+class _HeaderProfileWidgetState extends State<HeaderProfileWidget> {
+  UserService _service = UserService();
   @override
   Widget build(BuildContext context) {
+    void _imagePicker() async {
+      ImagePicker imagePicker = ImagePicker();
+
+      XFile? file = await imagePicker.pickImage(source: ImageSource.gallery);
+      print('${file?.path}');
+      if (file == null) return;
+
+      String uniqueFilename = DateTime.now().millisecondsSinceEpoch.toString();
+
+      Reference referenceRoot = FirebaseStorage.instance.ref();
+      Reference referenceDirImages = referenceRoot.child('images');
+
+      Reference referenceImagetoUpload =
+          referenceDirImages.child(uniqueFilename);
+      try {
+        await referenceImagetoUpload.putFile(File(file!.path));
+        await referenceImagetoUpload.getDownloadURL().then((value) {
+          _service.updateImage(image: value);
+        });
+      } catch (e) {}
+    }
+
     return FirestoreQueryBuilder<UserModel>(
         query: userQuery(),
         builder: (context, snapshot, _) {
@@ -37,7 +70,7 @@ class HeaderProfileWidget extends StatelessWidget {
               UserModel userModel = user.data();
               return Container(
                 width: double.infinity,
-                height: height,
+                height: widget.height,
                 color: primaryColor,
                 child: Center(
                     child: Column(
@@ -47,8 +80,8 @@ class HeaderProfileWidget extends StatelessWidget {
                       clipBehavior: Clip.none,
                       children: [
                         Container(
-                          height: heightAva,
-                          width: widthAva,
+                          height: widget.heightAva,
+                          width: widget.widthAva,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(color: Colors.white, width: 2),
@@ -66,10 +99,12 @@ class HeaderProfileWidget extends StatelessWidget {
                           right: 0,
                           bottom: 0,
                           child: CircleIconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              _imagePicker();
+                            },
                             svgIcon: 'assets/icons/Camera Icon.svg',
                             color: cardShadowColor,
-                            size: size,
+                            size: widget.size,
                           ),
                         )
                       ],

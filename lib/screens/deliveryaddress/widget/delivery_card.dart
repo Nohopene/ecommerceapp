@@ -6,8 +6,8 @@ import 'package:sizer/sizer.dart';
 import '../../../constanst/color_constant.dart';
 
 class DeliveryCard extends StatefulWidget {
-  const DeliveryCard({super.key});
-
+  const DeliveryCard({super.key, this.query});
+  final dynamic query;
   @override
   State<DeliveryCard> createState() => _DeliveryCardState();
 }
@@ -16,10 +16,10 @@ class _DeliveryCardState extends State<DeliveryCard> {
   @override
   Widget build(BuildContext context) {
     return FirestoreQueryBuilder<Address>(
-      query: addressQuery(),
+      query: widget.query,
       builder: (context, snapshot, _) {
         return ListView.builder(
-          physics: AlwaysScrollableScrollPhysics(),
+          physics: ScrollPhysics(),
           shrinkWrap: true,
           itemCount: snapshot.docs.length,
           itemBuilder: (context, index) {

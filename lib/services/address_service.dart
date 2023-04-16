@@ -13,7 +13,7 @@ class AddressService {
     addresss.doc(user!.uid).set({
       'user': user!.uid,
     });
-    return addresss.doc(user!.uid).collection('address').doc(user!.uid).set({
+    return addresss.doc(user!.uid).collection('address').doc().set({
       'uid': user?.uid,
       'name': name,
       'phone': phone,

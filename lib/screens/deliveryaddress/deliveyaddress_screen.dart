@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerceapp/constanst/color_constant.dart';
+import 'package:ecommerceapp/models/address_model.dart';
 import 'package:ecommerceapp/providers/location_provider.dart';
 import 'package:ecommerceapp/screens/deliveryaddress/widget/add_address.dart';
 import 'package:ecommerceapp/screens/deliveryaddress/widget/delivery_card.dart';
@@ -33,15 +34,20 @@ class _AddressScreenState extends State<AddressScreen> {
       child: Scaffold(
         backgroundColor: Colors.grey.shade300,
         appBar: header(),
-        body: Column(children: [
-          DeliveryCard(),
-          TextButton.icon(
-              onPressed: () {
-                Navigator.pushNamed(context, AddAddressScreen.id);
-              },
-              icon: const Icon(Icons.add),
-              label: const Text('Add new address'))
-        ]),
+        body: SingleChildScrollView(
+          physics: const ScrollPhysics(),
+          child: Column(children: [
+            DeliveryCard(
+              query: addressQuery(),
+            ),
+            TextButton.icon(
+                onPressed: () {
+                  Navigator.popAndPushNamed(context, AddAddressScreen.id);
+                },
+                icon: const Icon(Icons.add),
+                label: const Text('Add new address'))
+          ]),
+        ),
       ),
     );
   }

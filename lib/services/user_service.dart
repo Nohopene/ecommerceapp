@@ -10,10 +10,22 @@ class UserService {
   }
 
   Future<void> updateName({required name}) {
-    return users
-        .doc(user!.uid)
-        .collection('uid')
-        .doc(user!.uid)
-        .update({'name': name});
+    return users.doc(user!.uid).update({'name': name});
+  }
+
+  Future<void> updateBio({required bio}) {
+    return users.doc(user!.uid).update({'bio': bio});
+  }
+
+  Future<void> updateGender({required gender}) {
+    return users.doc(user!.uid).update({'gender': gender});
+  }
+
+  Future<void> updateBirthday({required birthday}) {
+    return users.doc(user!.uid).update({'birthday': birthday});
+  }
+
+  Future<void> updateImage({required image}) {
+    return users.doc(user!.uid).update({'image': image});
   }
 }
