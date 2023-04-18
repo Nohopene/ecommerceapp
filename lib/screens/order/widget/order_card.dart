@@ -64,7 +64,9 @@ class _CartCard1State extends State<OrderCard> {
                               ? Colors.blue
                               : data['status'] == 'Complete'
                                   ? Colors.green
-                                  : Colors.red,
+                                  : data['status'] == 'On the way'
+                                      ? Colors.orange
+                                      : Colors.red,
                           fontWeight: FontWeight.w700),
                     ),
                     subtitle: Text(
@@ -85,6 +87,20 @@ class _CartCard1State extends State<OrderCard> {
                       style: TextStyle(fontSize: 14, color: Colors.grey),
                     ),
                     children: [
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(1.15.h, 1.h, 1.15.h, 1.h),
+                        child: Column(children: [
+                          Row(
+                            children: const [
+                              Text(
+                                'Products:',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w500, fontSize: 14),
+                              ),
+                            ],
+                          ),
+                        ]),
+                      ),
                       ListView.builder(
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
@@ -120,6 +136,100 @@ class _CartCard1State extends State<OrderCard> {
                           );
                         },
                         itemCount: data['products'].length,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(1.15.h, 1.h, 1.15.h, 1.h),
+                        child: Column(children: [
+                          Row(
+                            children: const [
+                              Text(
+                                'Delivery address:',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w500, fontSize: 14),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const SizedBox(
+                                width: 135,
+                                child: Text(
+                                  'Name:',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12),
+                                ),
+                              ),
+                              Text(
+                                data['deliveryAddress']['orderName'],
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w500, fontSize: 12),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const SizedBox(
+                                width: 135,
+                                child: Text(
+                                  'Phone:',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12),
+                                ),
+                              ),
+                              Text(
+                                data['deliveryAddress']['phone'],
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w500, fontSize: 12),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(
+                                width: 135,
+                                child: Text(
+                                  'Detail Address:',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12),
+                                ),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  data['deliveryAddress']['address'],
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(
+                                width: 135,
+                                child: Text(
+                                  'Payment method:',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14),
+                                ),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  data['paymenmethod'],
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ]),
                       )
                     ],
                   ),
